@@ -1,0 +1,24 @@
+[22:23:5.384] Global cache location '/home/michael/.cache/typescript/4.0', safe file path '/home/michael/.nvm/versions/node/v10.19.0/lib/node_modules/typescript/lib/typingSafeList.json', types map path /home/michael/.nvm/versions/node/v10.19.0/lib/node_modules/typescript/lib/typesMap.json
+[22:23:5.386] Processing cache location '/home/michael/.cache/typescript/4.0'
+[22:23:5.387] Trying to find '/home/michael/.cache/typescript/4.0/package.json'...
+[22:23:5.468] Loaded content of '/home/michael/.cache/typescript/4.0/package.json': {"private":true,"dependencies":{"types-registry":"^0.1.508"},"devDependencies":{"@types/async":"^3.2.3","@types/atob":"^2.1.2","@types/sprintf":"^0.1.0","@types/webpack":"^4.41.22","@types/webpack-dev-server":"^3.11.0"}}
+[22:23:5.468] Loaded content of '/home/michael/.cache/typescript/4.0/package-lock.json'
+[22:23:5.533] Adding entry into typings cache: 'async' => '/home/michael/.cache/typescript/4.0/node_modules/@types/async/index.d.ts'
+[22:23:5.546] Adding entry into typings cache: 'atob' => '/home/michael/.cache/typescript/4.0/node_modules/@types/atob/index.d.ts'
+[22:23:5.574] Adding entry into typings cache: 'sprintf' => '/home/michael/.cache/typescript/4.0/node_modules/@types/sprintf/index.d.ts'
+[22:23:5.604] Adding entry into typings cache: 'webpack' => '/home/michael/.cache/typescript/4.0/node_modules/@types/webpack/index.d.ts'
+[22:23:5.609] Adding entry into typings cache: 'webpack-dev-server' => '/home/michael/.cache/typescript/4.0/node_modules/@types/webpack-dev-server/index.d.ts'
+[22:23:5.609] Finished processing cache location '/home/michael/.cache/typescript/4.0'
+[22:23:5.610] Process id: 6326
+[22:23:5.610] NPM location: /home/michael/.nvm/versions/node/v10.19.0/bin/npm (explicit '--npmLocation' not  provided)
+[22:23:5.610] validateDefaultNpmLocation: false
+[22:23:5.610] Npm config file: /home/michael/.cache/typescript/4.0/package.json
+[22:23:5.610] Updating types-registry npm package...
+[22:23:5.610] Exec: /home/michael/.nvm/versions/node/v10.19.0/bin/npm install --ignore-scripts types-registry@latest
+[22:23:7.968]     Succeeded. stdout:
+    + types-registry@0.1.508
+    updated 1 package and audited 25 packages in 1.683s
+found 0 vulnerabilities
+
+
+[22:23:7.968] Updated types-registry npm package
