@@ -4,9 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-      "build": "tsc",
-      "test": "jest",
-      "run": "npx ts-node src/index.ts"
+    "serve": "webpack-dev-server"
   },
   "repository": {
     "type": "git",
@@ -19,13 +17,17 @@
     "url": "https://github.com/michaellangbein/tsStarters/issues"
   },
   "homepage": "https://github.com/michaellangbein/tsStarters#readme",
-  "dependencies": {
-    "jest": "^26.4.2",
-    "ts-jest": "^26.4.0",
-    "ts-node": "^9.0.0",
-    "typescript": "^4.0.3"
-  },
   "devDependencies": {
-    "@types/jest": "^26.0.14"
+    "@types/ol": "^6.4.1",
+    "css-loader": "^4.3.0",
+    "style-loader": "^1.2.1",
+    "ts-loader": "^8.0.4",
+    "typescript": "^4.0.3",
+    "webpack": "^4.44.2",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
+  },
+  "dependencies": {
+    "ol": "^6.4.3"
   }
 }
