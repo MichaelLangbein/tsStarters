@@ -1,38 +1,24 @@
-import { Map, View } from 'ol';
-import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer';
-import { OSM, Vector as VectorSource } from 'ol/source';
-import { GeoJSON } from 'ol/format';
-import 'ol/ol.css';
+import { BoxGeometry, Mesh, MeshBasicMaterial, PerspectiveCamera, Scene, WebGLRenderer } from "three";
 
 
-fetch('./data/buildings.geojson').then((response: Response) => {
-    response.json().then(data => {
-        const dataLayer = new VectorLayer({
-            source: new VectorSource({
-                features: new GeoJSON().readFeatures(data)
-            })
-        });
+const container = document.getElementById('map') as HTMLCanvasElement;
 
-        map.addLayer(dataLayer);
-    });
+const scene = new Scene();
+const renderer = new WebGLRenderer({
+    canvas: container
 });
+console.log('Using WebGL2: ', renderer.capabilities.isWebGL2);
+const camera = new PerspectiveCamera(75, container.width/container.height, 0.1, 1000);
 
+const geometry = new BoxGeometry();
+const material = new MeshBasicMaterial( { color: 0x00ff00 } );
+const cube = new Mesh( geometry, material );
+scene.add( cube );
 
-const anchor = document.getElementById('map') as HTMLDivElement;
+camera.position.z = 5;
 
-
-const bgLayer = new TileLayer({
-    source: new OSM()
-});
-
-const view = new View({
-    projection: 'EPSG:4326',
-    center: [15, 52],
-    zoom: 6
-});
-
-const map = new Map({
-    layers: [bgLayer],
-    target: anchor,
-    view: view
-});
+function animate() {
+	requestAnimationFrame( animate );
+	renderer.render( scene, camera );
+}
+animate();
