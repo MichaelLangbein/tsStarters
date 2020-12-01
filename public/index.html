@@ -2,14 +2,17 @@
   <head>
     <style>
       .map {
-        width: 600px;
-        height: 600px;
+        width: 1200px;
+        height: 900px;
       }
     </style>
   </head>
   <body>
     <h2>Demo app</h2>
     <canvas id="map" class="map"></canvas>
+    <div>
+      <input type="range" min="-20" max="20" value="-20" class="slider" id="rangeSlider">
+    </div>
   </body>
   <script src="./bundle.js"></script>
 </html>
