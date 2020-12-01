@@ -1,4 +1,4 @@
-import { Map, View } from 'ol';
+import { Map, Overlay, View } from 'ol';
 import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer';
 import { OSM, Vector as VectorSource } from 'ol/source';
 import { GeoJSON } from 'ol/format';
@@ -18,8 +18,8 @@ fetch('./data/buildings.geojson').then((response: Response) => {
 });
 
 
-const anchor = document.getElementById('map') as HTMLDivElement;
-
+const mapAnchor = document.getElementById('map') as HTMLDivElement;
+const popupAnchor = document.getElementById('popup') as HTMLDivElement;
 
 const bgLayer = new TileLayer({
     source: new OSM()
@@ -31,8 +31,24 @@ const view = new View({
     zoom: 6
 });
 
+const overlay = new Overlay({
+	element: popupAnchor,
+	autoPan: true,
+	autoPanAnimation: {
+		duration: 250
+	}
+});
+
 const map = new Map({
-    layers: [bgLayer],
-    target: anchor,
+	layers: [bgLayer],
+	overlays: [overlay],
+    target: mapAnchor,
     view: view
+});
+
+
+map.on('singleclick', (evt) => {
+	const coordinate = evt.coordinate;
+	popupAnchor.innerHTML = `${evt.coordinate}`;
+	overlay.setPosition(coordinate);
 });
