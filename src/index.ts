@@ -1,12 +1,9 @@
 import {
-    AmbientLight, BoxGeometry, BufferAttribute, BufferGeometry, BufferGeometryUtils,
-    Color,
-    DirectionalLight, DoubleSide, Mesh, MeshBasicMaterial, MeshLambertMaterial,
-    MeshPhongMaterial, PerspectiveCamera, PlaneGeometry, Scene, Vector3, VertexColors,
-    WebGLRenderer, WireframeGeometry
+    AmbientLight, Color, DirectionalLight, DoubleSide, Mesh, MeshBasicMaterial, 
+    PerspectiveCamera, PlaneGeometry, Scene, WebGLRenderer
 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { createAttributes, createBlockMesh } from './utils/utils';
+import { createBlockMeshes, getSubBlock } from './utils/utils';
 
 
 const container = document.getElementById('map') as HTMLCanvasElement;
@@ -64,9 +61,9 @@ const colorFunc = (val: number): [number, number, number] => {
     }
 };
 
-const X = 80;
-const Y = 30;
-const Z = 80;
+const X = 100;
+const Y = 20;
+const Z = 100;
 
 const allData: number[][][] = [];
 for (let x = 0; x < X; x++) {
@@ -74,8 +71,11 @@ for (let x = 0; x < X; x++) {
     for (let y = 0; y < Y; y++) {
         allData[x].push([]);
         for (let z = 0; z < Z; z++) {
-            if (y < 10 * Math.sin(x * 0.1) * Math.cos(z * 0.1) + 5) {
-                allData[x][y].push(1 + Math.floor(Math.random() * 4));
+            if (x === 0 || y === 0 || z === 0 || x === X-1 || y === Y-1 || z === Z-1) {
+                allData[x][y].push(0);
+            }
+            else if (y < 10 * Math.sin(x * 0.1) * Math.cos(z * 0.1) + 5) {
+                allData[x][y].push(Math.floor(10 * y/Y));
             } else {
                 allData[x][y].push(0);
             }
@@ -83,35 +83,48 @@ for (let x = 0; x < X; x++) {
     }
 }
 
-const blockSize = 0.5;
-const translation: [number, number, number] = [-20, -10, 0];
-const voxelBlock = createBlockMesh(allData, blockSize, [X, Y, Z], translation, colorFunc);
-scene.add(voxelBlock);
+const cubeSize = 1;
+const blockSize: [number, number, number] = [10, 10, 10];
+const translation: [number, number, number] = [-15, 0, -25];
+
+const voxelBlocks = createBlockMeshes(allData, cubeSize, blockSize, colorFunc);
+voxelBlocks.map(vb => vb.translate(translation));
+voxelBlocks.map(vb => scene.add(vb.mesh));
 
 slider.addEventListener('input', (ev: Event) => {
-    const val = +(slider.value);
+    const val = -50 + 100* +(slider.value) / 100;
+
     cutPlane.position.setX(val);
 
-    const newData: number[][][] = [];
-    for (let x = 0; x < X; x++) {
-        newData.push([]);
-        for (let y = 0; y < Y; y++) {
-            newData[x].push([]);
-            for (let z = 0; z < Z; z++) {
-                const xVal = translation[0] + x * blockSize / 2;
-                if (xVal < val) {
-                    newData[x][y][z] = 0;
-                } else {
-                    newData[x][y][z] = allData[x][y][z];
+    for (const vb of voxelBlocks) {
+        const bbox = vb.getBbox();
+        if (bbox.xMin <= val && val <= bbox.xMax) {
+
+            const startPointWC = vb.mesh.position.toArray();
+            const startPoint = vb.startPoint;
+            const blockSize = vb.blockSize;
+            const oldData = getSubBlock(allData, startPoint, blockSize);
+            const newData: number[][][] = [];
+            for (let x = 0; x < blockSize[0]; x++) {
+                newData.push([]);
+                for (let y = 0; y < blockSize[1]; y++) {
+                    newData[x].push([]);
+                    for (let z = 0; z < blockSize[2]; z++) {
+                        const xVal = startPointWC[0] + x * cubeSize;
+                        if (xVal < val) {
+                            newData[x][y][z] = 0;
+                        } else {
+                            newData[x][y][z] = oldData[x][y][z];
+                        }
+                    }
                 }
             }
+               
+            vb.updateData(newData);
         }
     }
 
-    const newAttrs = createAttributes(newData, blockSize, [X, Y, Z], translation, colorFunc);
-    (voxelBlock.geometry as BufferGeometry).setAttribute('position', newAttrs.position);
-    (voxelBlock.geometry as BufferGeometry).setAttribute('normal', newAttrs.normal);
-    (voxelBlock.geometry as BufferGeometry).setAttribute('color', newAttrs.color);
+
 });
 
 
